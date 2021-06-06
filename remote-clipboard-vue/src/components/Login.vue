@@ -70,7 +70,13 @@ export default {
   },
   methods: {
     login() {
-      this.$refs.loginFormRef.validate((valid) => {});
+      this.$refs.loginFormRef.validate(async (valid) => {
+        if (!valid) return;
+        const { data: res } = await this.$http.post("/user", this.loginForm);
+        console.log(res);
+        if (res.code === -1) return this.$message.error(res.msg);
+        return this.$message.success(res.msg);
+      });
     },
   },
 };
